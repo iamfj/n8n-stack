@@ -1,0 +1,13 @@
+ARG CADDY_VERSION
+
+FROM caddy:${CADDY_VERSION}
+
+ARG DOMAIN_NAME
+ARG SUBDOMAIN
+
+RUN mkdir -p /etc/caddy/
+
+COPY Caddyfile /etc/caddy/Caddyfile
+
+RUN sed -i "s/<domain>/${DOMAIN_NAME}/g" /etc/caddy/Caddyfile \
+    && sed -i "s/<subdomain>/${SUBDOMAIN}/g" /etc/caddy/Caddyfile

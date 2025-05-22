@@ -1,0 +1,8 @@
+ARG N8N_VERSION
+
+FROM docker.n8n.io/n8nio/n8n:${N8N_VERSION}
+
+COPY --chown=node:node credentials.json /home/node/credentials.json
+COPY --chown=node:node docker-entrypoint.sh /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
