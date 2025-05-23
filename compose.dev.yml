@@ -1,0 +1,32 @@
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+  
+  zoo:
+    ports:
+      - "2181:2181"
+
+  kafka-ui:
+    ports:
+      - "8080:8080"
+  
+  kafka:
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+      - "9999:9999"
+
+  n8n:
+    environment:
+      N8N_HOST: localhost
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: http://localhost:5678/
+    ports:
+      - 5678:5678
+
+volumes:
+  caddy_data:
+  n8n_data:
+  n8n_local_files:
+  postgres_data:

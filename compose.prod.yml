@@ -1,0 +1,36 @@
+services:
+  postgres:
+    ports:
+      - "5432:5432"
+
+  caddy:
+    build:
+      context: caddy
+      dockerfile: Containerfile
+      args:
+        CADDY_VERSION: latest
+        DOMAIN_NAME: ${DOMAIN_NAME}
+        SUBDOMAIN: ${SUBDOMAIN}
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    env_file:
+      - .env
+    volumes:
+      - caddy_data:/data
+    depends_on:
+      n8n:
+        condition: service_healthy
+      kafka-ui:
+        condition: service_healthy
+
+volumes:
+  caddy_data:
+    external: true
+  n8n_data:
+    external: true
+  n8n_local_files:
+    external: true
+  postgres_data:
+    external: true
