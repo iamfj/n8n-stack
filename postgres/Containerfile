@@ -1,0 +1,11 @@
+ARG POSTGRES_VERSION
+
+FROM postgres:${POSTGRES_VERSION}
+
+ARG N8N_POSTGRES_USER
+ARG N8N_POSTGRES_PASSWORD
+
+COPY init.sql /docker-entrypoint-initdb.d/init.sql
+
+RUN sed -i "s/{{ N8N_POSTGRES_USER }}/${N8N_POSTGRES_USER}/g" /docker-entrypoint-initdb.d/init.sql \
+    && sed -i "s/{{ N8N_POSTGRES_PASSWORD }}/${N8N_POSTGRES_PASSWORD}/g" /docker-entrypoint-initdb.d/init.sql

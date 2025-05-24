@@ -3,11 +3,13 @@ ARG CADDY_VERSION
 FROM caddy:${CADDY_VERSION}
 
 ARG DOMAIN_NAME
-ARG SUBDOMAIN
+ARG N8N_SUBDOMAIN
+ARG KAFKA_SUBDOMAIN
 
 RUN mkdir -p /etc/caddy/
 
 COPY Caddyfile /etc/caddy/Caddyfile
 
 RUN sed -i "s/<domain>/${DOMAIN_NAME}/g" /etc/caddy/Caddyfile \
-    && sed -i "s/<subdomain>/${SUBDOMAIN}/g" /etc/caddy/Caddyfile
+    && sed -i "s/<n8n_subdomain>/${N8N_SUBDOMAIN}/g" /etc/caddy/Caddyfile \
+    && sed -i "s/<kafka_subdomain>/${KAFKA_SUBDOMAIN}/g" /etc/caddy/Caddyfile

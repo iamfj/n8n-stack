@@ -1,16 +1,19 @@
 services:
   postgres:
-    image: postgres
+    build:
+      context: postgres
+      dockerfile: Containerfile
+      args:
+        POSTGRES_VERSION: latest
+        N8N_POSTGRES_USER: ${N8N_POSTGRES_USER}
+        N8N_POSTGRES_PASSWORD: ${N8N_POSTGRES_PASSWORD}
     restart: unless-stopped
-    ports:
-      - "5432:5432"
     env_file:
       - .env
     environment:
       - POSTGRES_DB=n8n
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -21,8 +24,6 @@ services:
   zoo:
     image: confluentinc/cp-zookeeper
     restart: unless-stopped
-    ports:
-      - "2181:2181"
     env_file:
       - .env
     environment:
@@ -38,10 +39,6 @@ services:
   kafka:
     image: confluentinc/cp-kafka
     restart: unless-stopped
-    ports:
-      - "9092:9092"
-      - "29092:29092"
-      - "9999:9999"
     env_file:
       - .env
     environment:
@@ -70,8 +67,6 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui
     restart: unless-stopped
-    ports:
-      - "8080:8080"
     env_file:
       - .env
     environment:
@@ -97,8 +92,6 @@ services:
       args:
         N8N_VERSION: latest
     restart: unless-stopped
-    ports:
-      - 5678:5678
     env_file:
       - .env
     environment:
@@ -128,35 +121,3 @@ services:
       timeout: 10s
       retries: 5
       start_period: 30s
-
-  caddy:
-    build:
-      context: caddy
-      dockerfile: Containerfile
-      args:
-        CADDY_VERSION: latest
-        DOMAIN_NAME: ${DOMAIN_NAME}
-        SUBDOMAIN: ${SUBDOMAIN}
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    env_file:
-      - .env
-    volumes:
-      - caddy_data:/data
-    depends_on:
-      n8n:
-        condition: service_healthy
-      kafka-ui:
-        condition: service_healthy
-
-volumes:
-  caddy_data:
-    # external: true
-  n8n_data:
-    # external: true
-  n8n_local_files:
-    # external: true
-  postgres_data:
-    # external: true
