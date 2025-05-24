@@ -1,3 +1,4 @@
+set dotenv-required
 set dotenv-load := true
 
 dev_files := "-f compose.yml -f compose.dev.yml"
