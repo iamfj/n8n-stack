@@ -1,6 +1,12 @@
 services:
   postgres:
-    image: postgres
+    build:
+      context: postgres
+      dockerfile: Containerfile
+      args:
+        POSTGRES_VERSION: latest
+        N8N_POSTGRES_USER: ${N8N_POSTGRES_USER}
+        N8N_POSTGRES_PASSWORD: ${N8N_POSTGRES_PASSWORD}
     restart: unless-stopped
     env_file:
       - .env
@@ -8,7 +14,6 @@ services:
       - POSTGRES_DB=n8n
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
