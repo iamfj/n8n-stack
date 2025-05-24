@@ -30,3 +30,6 @@ restart env="dev": (down env) && (up env)
 
 [confirm('The stack will be updated and restarted. Are you sure you want to continue? (y/n)')]
 update env="dev": (down env) (pull env) && (up env "rebuild")
+    @git stash --include-untracked || echo "No changes to stash"
+    @git pull
+    @git stash pop || echo "No changes to pop"
