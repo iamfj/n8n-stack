@@ -1,5 +1,11 @@
-n8n.<domain>.<suffix> {
+<n8n_subdomain>.<domain> {
     reverse_proxy n8n:5678 {
+        flush_interval -1
+    }
+}
+
+<kafka_subdomain>.<domain> {
+    reverse_proxy kafka-ui:8080 {
         flush_interval -1
     }
 }

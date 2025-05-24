@@ -10,7 +10,8 @@ services:
       args:
         CADDY_VERSION: latest
         DOMAIN_NAME: ${DOMAIN_NAME}
-        SUBDOMAIN: ${SUBDOMAIN}
+        N8N_SUBDOMAIN: ${N8N_SUBDOMAIN_NAME}
+        KAFKA_SUBDOMAIN: ${KAFKA_SUBDOMAIN_NAME}
     restart: unless-stopped
     ports:
       - "80:80"
